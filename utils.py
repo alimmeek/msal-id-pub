@@ -15,6 +15,7 @@ from cryptography.fernet import Fernet
 import server
 
 
+# Exception to thow when the client environment variable isn't set
 class MissingClientError(Exception):
     print("Error - set CLIENT environment variable")
 
