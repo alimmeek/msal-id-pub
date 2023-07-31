@@ -18,9 +18,9 @@ import server
 class MissingClientError(Exception):
     print("Error - set CLIENT environment variable")
 
-# Exception to throw when our token is expired
-class ExpiredTokenError(Exception):
-    pass
+# Exception to throw when a token is invalid
+class InvalidTokenError(Exception):
+    print("Error - Invalid token")
 
 
 CLIENT = os.environ.get("CLIENT")
