@@ -1,6 +1,5 @@
 import base64
 import datetime
-import json
 import os
 import random
 import requests
@@ -17,11 +16,13 @@ import server
 
 # Exception to thow when the client environment variable isn't set
 class MissingClientError(Exception):
-    print("Error - set CLIENT environment variable")
+    def __init__(self):
+        self.message = "Error - set CLIENT environment variable"
 
 # Exception to throw when a token is invalid
 class InvalidTokenError(Exception):
-    print("Error - Invalid token")
+    def __init__(self):
+        self.message = "Error - Invalid token"
 
 
 CLIENT = os.environ.get("CLIENT")
@@ -75,8 +76,7 @@ def issue_token() -> dict:
     &response_mode=form_post
     &scope=openid+profile
     &state={state}
-    &nonce={nonce}
-    &prompt=login''')
+    &nonce={nonce}''')
     webbrowser.open_new(x.url)
 
     # Logging in will prompt Microsoft to send the ID token to 127.0.0.1:8000, so
@@ -94,12 +94,7 @@ def issue_token() -> dict:
     # Use Microsoft's OIDC library to decode the retrieved token and verify it
     token = oidc.decode_id_token(contents['id_token'])
     valid = verify(token, nonce=nonce)
-    print(valid)
     if valid:
-        # Store the token on the device so we don't have to keep contacting
-        # Microsoft
-        with open('token.json', 'w+') as f:
-            json.dump(token, f, indent=2)
         print(f"Received token for {token['name']}, issued {datetime.datetime.fromtimestamp(token['iat'])} expires {datetime.datetime.fromtimestamp(token['exp'])}")
         return token
     

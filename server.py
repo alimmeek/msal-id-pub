@@ -1,6 +1,5 @@
 import socket
 
-# TODO: send a webpage back for the user?
 
 SELF = "127.0.0.1"
 TOKEN_PORT = 8000

@@ -1,7 +1,9 @@
+import json
 import server
 from utils import *
 
-# TODO: Connection resets sometimes
+# Warning: Connection resets sometimes, not sure what's going on there
+# It still issues you an ID token though
 
 def main():
     # Retreive a token
