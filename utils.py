@@ -76,7 +76,8 @@ def issue_token() -> dict:
     &response_mode=form_post
     &scope=openid+profile
     &state={state}
-    &nonce={nonce}''')
+    &nonce={nonce}
+    &prompt=login''')
     webbrowser.open_new(x.url)
 
     # Logging in will prompt Microsoft to send the ID token to 127.0.0.1:8000, so
