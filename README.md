@@ -17,8 +17,8 @@ Contains various methods used throughout the other files, including the method t
 
 ### Requirements
 Python 3.8+, as well as the following libraries:
-- msal
-- cryptography
+- `msal`
+- `cryptography`
 
 All other libraries used are part of Python's standard library.
 
