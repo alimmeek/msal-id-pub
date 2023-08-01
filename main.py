@@ -1,6 +1,8 @@
 import json
+
 import server
 from utils import *
+
 
 # Warning: Connection resets sometimes, not sure what's going on there
 # It still issues you an ID token though
