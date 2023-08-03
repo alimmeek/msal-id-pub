@@ -1,7 +1,7 @@
 # OIDC using Microsoft Authentication Library (MSAL)
 
 ## Overview
-Implements the OIDC authentication flow to issue ID tokens which verify each instance of the program. Makes use of the Python `msal` library and the **Microsoft Identity Platform** in order to verify the identities of users.
+An implementation of the OIDC authentication flow to issue ID tokens which verify each instance of the program. Makes use of the Python `msal` library and the **Microsoft Identity Platform** in order to verify the identities of users.
 
 #### `main.py`
 Drives the program: responsible for issuing, validating and swapping tokens with another program instance
@@ -32,18 +32,19 @@ Download the code, and navigate to the location of the code in your terminal
 
 Run the command:
   
-    python main.py
+    python main.py <FILEPATH>
 
-to start an instance of the program. Your default web browser should launch, and you will need to log in with a Microsoft account (personal or work/school). Once complete, the browser will be redirected to `localhost:8000`. It's possible that you may see a "Connection reset" page, ignore it and close the web browser.</p>
+to start an instance of the program, where FILEPATH is the where you want the token to be stored (including the file name). Note that Microsoft uses **JSON Web Tokens**, so the file should be a `.json` file. 
 
-If you have successfully completed the authentication flow, you should now see this message in the terminal:
+Your default web browser should launch, and you will need to log in with a Microsoft account (personal or work/school). Once complete, the browser will be redirected to `localhost:8000`. It's possible that you may see a "Connection reset" page, ignore it and close the web browser. If you have successfully completed the authentication flow, you should now see this message in the terminal:
 
     Received token for <NAME>, issued <DATE> expires <DATE>
 
-Open another terminal window and run the program again (you'll have to log in again, you can choose either the same account as before, or a different one). Once the authentication flow has finished, close the web browser.
-The terminals will now show that they have received another token:
+Navigate to the file path you specified when running the program, and open the new `.json` file, the contents should look like:
 
-    Received token for <NAME>
     {
+        "<field name>": "<value>"
         ...
     }
+
+[Click here](https://learn.microsoft.com/en-us/azure/active-directory/develop/id-token-claims-reference?source=recommendations) to find out what each field corresponds to.
