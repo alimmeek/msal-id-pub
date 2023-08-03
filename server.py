@@ -3,7 +3,6 @@ import socket
 
 SELF = "127.0.0.1"
 TOKEN_PORT = 8000
-CLIENT_PORT = 7878
 
 
 def token() -> str:
@@ -52,52 +51,3 @@ def token() -> str:
             # Respond with HTTP OK and request to close the connection
             conn.send(b'HTTP/1.1 200 OK\r\n')
     return data
-
-def client(my_token: str, send: bool, has_sent: bool) -> (str, bool):
-    # Create a socket
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        if send:
-            # If we are attempting to send, try to connect to the destination 
-            # port
-            # If successful, send our token and change has_sent to True so 
-            # we don't attempt to send the token again
-            # If the connection is refused, it means the destination hadn't 
-            # opened the port, so just return and try again later
-            try:
-                s.connect((SELF, CLIENT_PORT))
-                s.send(my_token.encode())
-                s.send(b'\r\n')
-                has_sent = True
-            except ConnectionRefusedError:
-                return (None, has_sent)
-        else:
-            # Otherwise, we should listen for an incoming token
-            # Avoids potential deadlock in the case of both clients waiting for
-            # the other to send their token by using timeouts
-            # If no connection is detected within 1 second, a TimeoutError is
-            # raised, causing None to be returned
-            # OSError can occur if the client are on the same device, and one
-            # attempts to listen while the other is already listening
-            try:
-                s.bind((SELF, CLIENT_PORT))
-                s.settimeout(1)
-                s.listen()
-                conn, _ = s.accept()
-            except (OSError, TimeoutError):
-                return (None, has_sent)
-            
-            # If a connection was successfully set up, read the incoming token
-            # Break once the end of the message (indicated by \r\n) is received
-            token = ""
-            with conn:
-                while True:
-                    temp = conn.recv(1024).decode()
-                    token += temp
-                    if '\r\n' in temp:
-                        break
-            
-            # Return the received token, removing the \r\n and replacing the 
-            # single quotes with "" (allows us to use json to convert it to
-            # a dict)
-            return (token.replace("\r\n", "").replace("'", '"'), has_sent)
-    return (None, has_sent)
